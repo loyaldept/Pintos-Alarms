@@ -2,19 +2,19 @@
 #include "../../devices/timer.h"
 #include <stdio.h>
 
-void test_alarm_busy(void) {
+void test_alarm_zero(void) {
     int64_t start = timer_ticks();
-    timer_sleep(5);  // should not busy wait
+    timer_sleep(0);  // should not sleep
     int64_t end = timer_ticks();
-    if (end - start >= 5) {
-        printf("alarm-busy: PASS\n");
+    if (end - start == 0) {
+        printf("alarm-zero: PASS\n");
     } else {
-        printf("alarm-busy: FAIL\n");
+        printf("alarm-zero: FAIL\n");
     }
 }
 
 int main() {
     timer_init();
-    test_alarm_busy();
+    test_alarm_zero();
     return 0;
 }
