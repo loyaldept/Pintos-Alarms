@@ -1,50 +1,42 @@
-/* threads/synch.h - Synchronization primitives. */
-
 #ifndef THREADS_SYNCH_H
 #define THREADS_SYNCH_H
 
-#include <list.h>
 #include <stdbool.h>
+#include <list.h>
 
-/* a counting semaphore. */
-struct semaphore
-  {
-    unsigned value;             /* current value. */
-    struct list waiters;        /* list of waiting threads. */
-  };
+/* lock structure */
+struct lock {
+    struct thread *holder;      /* thread holding lock (for debugging) */
+    struct list waiters;        /* list of waiting threads */
+};
 
-void sema_init (struct semaphore *, unsigned value);
-void sema_down (struct semaphore *);
-bool sema_try_down (struct semaphore *);
-void sema_up (struct semaphore *);
-void sema_self_test (void);
+/* semaphore structure */
+struct semaphore {
+    unsigned value;             /* current value */
+    struct list waiters;        /* list of waiting threads */
+};
 
-/* a lock. */
-struct lock
-  {
-    struct thread *holder;      /* thread holding lock (for debugging). */
-    struct semaphore semaphore; /* binary semaphore controlling access. */
-  };
+/* condition variable structure */
+struct condition {
+    struct list waiters;        /* list of waiting threads */
+};
 
-void lock_init (struct lock *);
-void lock_acquire (struct lock *);
-bool lock_try_acquire (struct lock *);
-void lock_release (struct lock *);
-bool lock_held_by_current_thread (const struct lock *);
+/* lock functions */
+void lock_init(struct lock *lock);
+void lock_acquire(struct lock *lock);
+void lock_release(struct lock *lock);
+bool lock_held_by_current_thread(const struct lock *lock);
 
-/* condition variable. */
-struct condition
-  {
-    struct list waiters;        /* list of waiting threads. */
-  };
+/* semaphore functions */
+void sema_init(struct semaphore *sema, unsigned value);
+void sema_down(struct semaphore *sema);
+bool sema_try_down(struct semaphore *sema);
+void sema_up(struct semaphore *sema);
 
-void cond_init (struct condition *);
-void cond_wait (struct condition *, struct lock *);
-void cond_signal (struct condition *, struct lock *);
-void cond_broadcast (struct condition *, struct lock *);
+/* condition variable functions */
+void cond_init(struct condition *cond);
+void cond_wait(struct condition *cond, struct lock *lock);
+void cond_signal(struct condition *cond, struct lock *lock);
+void cond_broadcast(struct condition *cond, struct lock *lock);
 
-/* optimization barrier. */
-#define barrier() __asm volatile ("" : : : "memory")
-
-#endif /* threads/synch.h */
-
+#endif /* THREADS_SYNCH_H */

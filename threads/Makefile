@@ -1,26 +1,13 @@
-# Pintos Threads Makefile
-# Builds all .c files in this directory
+CC = gcc
+CFLAGS = -Wall -g -O -std=gnu99 -I../lib -I. -I../devices
+LDFLAGS = -lm
 
-BUILD_DIR = build
-CC = i386-elf-gcc
-CFLAGS = -Wall -g -O -std=gnu99 -I../lib -I../devices -I../threads -I.
+OBJS = thread.o
 
-CFILES = $(wildcard *.c)
-OBJS = $(patsubst %.c,$(BUILD_DIR)/%.o,$(CFILES))
+all: $(OBJS)
 
-all: $(BUILD_DIR)/kernel.bin
-
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
-
-$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(BUILD_DIR)/kernel.bin: $(OBJS)
-	i386-elf-ld -o $@ $(OBJS)
+thread.o: thread.c thread.h debug.h list.h interrupt.h synch.h flags.h intr-stubs.h palloc.h switch.h vaddr.h
+	$(CC) $(CFLAGS) -c thread.c -o thread.o
 
 clean:
-	rm -rf $(BUILD_DIR)
-
-.PHONY: all clean
-
+	rm -f *.o
