@@ -15,30 +15,34 @@ This project implements an efficient alarm clock system for the Pintos operating
 - **Proper Synchronization**: Handles concurrent access and timer interrupts safely
 
 ## Project Structure
-
 ```
 Pintos-Alarms/
 ├── devices/
 │   ├── timer.c          # Main alarm implementation
-│   ├── timer.h          # Timer interface
-│   └── Makefile
+│   ├── timer.h          # Timer header file
+│   └── Makefile         # Device compilation rules
 ├── threads/
-│   ├── thread.c         # Modified thread implementation
-│   ├── thread.h         # Thread structure with wakeup_tick
+│   ├── thread.h         # Thread structure definitions
+│   ├── thread.c         # Thread management functions
+│   ├── interrupt.h      # Interrupt handling
 │   ├── synch.h          # Synchronization primitives
-│   └── Makefile
+│   ├── list.h           # Linked list implementation
+│   └── debug.h          # Debug utilities
+├── lib/
+│   ├── debug.c          # Debug implementation
+│   ├── debug.h          # Debug header
+│   └── round.h          # Rounding utilities
 ├── tests/
 │   └── threads/
 │       ├── alarm-single.c    # Single alarm test
 │       ├── alarm-multiple.c  # Multiple alarms test
-│       ├── alarm-negative.c  # Negative sleep test
 │       ├── alarm-zero.c      # Zero sleep test
+│       ├── alarm-negative.c  # Negative sleep test
 │       └── alarm-busy.c      # Busy waiting test
-├── lib/                 # Debug utilities
-├── DESIGN_DOCUMENT.md    # Complete design documentation
-└── Makefile             # Main build file
+├── DESIGN_DOCUMENT.md   # Complete design document
+├── README.md           # This file
+└── Makefile           # Main build file
 ```
-
 ## Building the Project
 
 ### Prerequisites
